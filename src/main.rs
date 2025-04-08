@@ -1,4 +1,6 @@
 use clap::Parser;
+use std::fs;
+use std::io::Write;
 
 #[derive(Parser)]
 struct Cli {
@@ -16,13 +18,28 @@ fn main() {
         println!("No command provided.");
         return;
     }
-    
-    if cli.args.len() == 1 {
-        println!("Using project_name for env");
-        return;
-    } else if cli.args.len() == 2 {
-        println!("Using custom name for env");
-    } 
+    if cli.command == "create" {
+        if cli.args.len() == 1 {
+            let project_name = cli.args[0].clone();
+            fs::create_dir(&project_name).unwrap();
+            let mut python_file = fs::File::create(format!("{}/main.py", project_name)).unwrap(); 
+            let mut toml_file = fs::File::create(format!("{}/py.toml", project_name)).unwrap();
+            python_file.write_all(b"").unwrap();
+            toml_file.write_all(b"").unwrap();
 
+            println!("Using project_name for env");
+            return;
+        } else if cli.args.len() == 2 {
+            let project_name = cli.args[0].clone();
+            fs::create_dir(&project_name).unwrap();
+            let mut python_file = fs::File::create(format!("{}/main.py", project_name)).unwrap(); 
+            let mut toml_file = fs::File::create(format!("{}/py.toml", project_name)).unwrap();
+            python_file.write_all(b"").unwrap();
+            toml_file.write_all(b"").unwrap(); 
+            
+            println!("Using custom name for env");
+            return;
+        } 
+    }
     println!("Command: {:?}, args: {:?}", cli.command, cli.args);   
 }
