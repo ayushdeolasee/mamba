@@ -55,7 +55,22 @@ fn main() {
             return;
         } 
     } if cli.command == "delete" {
+        if cli.args[0] == "env" {
+            let env_name = cli.args[1].clone();
+            let conda_status = Command::new("conda")
+                .arg("remove")
+                .arg("--name")
+                .arg(&env_name)
+                .arg("--all")
+                .arg("--yes")
+                // .stdout(Stdio::null()) 
+                .status()
+                .expect("Failed to remove conda environment");
+            println!("Removed conda env: {}", env_name);
 
+        } else {
+            println!("Argument {:?} not found.", cli.args[0]);
+        } 
     } if cli.command == "install" {
         
     } if cli.command == "template" {
